@@ -5,16 +5,32 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddPermissonRequest;
 use App\Http\Requests\StorePermissionRequest;
+use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class PermissionController extends Controller
+
+class PermissionController extends Controller implements HasMiddleware
 {
+    public static function middleware(): Array
+    {
+        return [
+            new Middleware('permission:view-permission', only: ['index']),
+            new Middleware('permission:add-permission', only: ['create']),
+            new Middleware('permission:edit-permission', only: ['edit']),
+            new Middleware('permission:delete-permission', only: ['destroy'])
+
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $permissions = Permission::orderBy('created_at','DESC')->get();
         return view('permission.list',compact('permissions'));
@@ -23,7 +39,7 @@ class PermissionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('permission.create');
     }
@@ -31,7 +47,7 @@ class PermissionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AddPermissonRequest $request)
+    public function store(AddPermissonRequest $request): RedirectResponse
     {
         Permission::create([
         'name' => $request->name,
@@ -51,7 +67,7 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $permission = Permission::findorFail($id);
         return view('permission.edit',compact('permission'));
@@ -60,7 +76,7 @@ class PermissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StorePermissionRequest $request, string $id)
+    public function update(StorePermissionRequest $request, string $id): RedirectResponse
     {
         $permission = Permission::findOrFail($id);
 

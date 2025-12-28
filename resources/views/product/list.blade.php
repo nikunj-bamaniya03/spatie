@@ -1,70 +1,92 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Product List') }}
-            </h2>
-            <a href="{{ route('products.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">Add Product</a>
+            <h2 class="text-xl font-semibold">Product List</h2>
+
+            @can('add-product')
+            <a href="{{ route('products.create') }}"
+                class="bg-slate-700 text-white px-5 py-2 rounded">
+                Add Product
+            </a>
+            @endcan
         </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <x-alert />
-                <x-error />
-                <div class="p-6 text-gray-900">
 
-                    <table class="w-full">
-                        <thead class="bg-gray-100">
-                            <tr class="border-b">
-                                <th class="px-6 py-3 text-left" width="60">#</th>
-                                <th class="px-6 py-3 text-left">Category</th>
-                                <th class="px-6 py-3 text-left">Product</th>
-                                <th class="px-6 py-3 text-left" width="180">Description</th>
-                                <th class="px-6 py-3 text-left" width="180">Price</th>
-                                <th class="px-6 py-3 text-left" width="180">Image</th>
-                                <th class="px-6 py-3 text-center" width="180">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if($products->isNotEmpty())
-                            @foreach($products as $product)
-                            <tr>
-                                <td class="px-6 py-3 text-left" width="60">{{ $product->id }}</td>
-                                <td class="px-6 py-3 text-left">{{ $product->category_id }}</td>
-                                <td class="px-6 py-3 text-left">{{ $product->product_name }}</td>
-                                <td class="px-6 py-3 text-left">{{ $product->product_description }}</td>
-                                <td class="px-6 py-3 text-left">{{ $product->product_price }}</td>
-                                <td class="px-6 py-3 text-left">{{ $product->product_image }}</td>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-                                <td class="px-6 py-3 text-center">
-                                    <div class="flex justify-center gap-2">
-                                        <a href="{{ route('products.edit',$product->id)}}"
-                                            class="bg-slate-600 text-sm rounded-md text-white px-3 py-1 hover:bg-slate-500">
-                                            Edit</a>
-                                        <a href="#" data-id=""
-                                            class="delete-permission bg-red-600 text-sm rounded-md text-white px-3 py-1 hover:bg-red-500">
-                                            Delete</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                @foreach($products as $product)
+                <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+
+                     <!-- Image  -->
+                    <div class="h-48 bg-gray-100 overflow-hidden">
+                        @if($product->product_image)
+                        <img src="{{ asset('storage/'.$product->product_image) }}"
+                            class="h-full w-full object-cover hover:scale-105 transition">
+                        @else
+                        <div class="flex items-center justify-center h-full text-gray-400">
+                            No Image
+                        </div>
+                        @endif
+                    </div>
+
+                    
+                    <!-- Body -->
+                    <div class="p-4">
+
+                        <!-- Category -->
+                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">
+                            {{ $product->category->categorie_name ?? 'No Category' }}
+                        </span>
+
+                        <!-- Name -->
+                        <h3 class="font-semibold text-lg mt-2">
+                            {{ $product->product_name }}
+                        </h3>
+
+                        <!-- Description -->
+                        <p class="text-sm text-gray-500 mt-1 line-clamp-2">
+                            {{ $product->product_description }}
+                        </p>
+
+                        <!-- Price -->
+                        <div class="mt-3 text-xl font-bold text-green-600">
+                            ₹ {{ number_format($product->product_price, 2) }}
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="mt-4 flex gap-2">
+                            @can('edit-product')
+                            <a href="{{ route('products.edit',$product->id) }}"
+                                class="flex-1 text-center bg-blue-600 text-white py-2 rounded text-sm">
+                                Edit
+                            </a>
+                            @endcan
+
+                            @can('delete-product')
+                            <button data-id="{{ $product->id }}"
+                                class="delete-product flex-1 bg-red-600 text-white py-2 rounded text-sm">
+                                Delete
+                            </button>
+                            @endcan
+                        </div>
+
+                    </div>
                 </div>
+                @endforeach
+
             </div>
         </div>
     </div>
 
-    <!-- Define dynamic route variable -->
+    <!-- AJAX -->
     @push('scripts')
     <script>
-        var roleDestroyUrl = "{{ route('roles.destroy', ':id') }}";
+        var productDestroyUrl = "{{ route('products.destroy', ':id') }}";
     </script>
-
-    <!-- public JS file -->
-    <script src="{{ asset('assets/admin/js/role.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/productDelete.js') }}"></script>
     @endpush
+
 </x-app-layout>

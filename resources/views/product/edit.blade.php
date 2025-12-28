@@ -13,7 +13,7 @@
                     <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
-                        {{-- Category Dropdown --}}
+                        <!-- Category Dropdown -->
                         <div>
                             <label class="text-lg font-medium">Category</label>
                             <div class="my-3">
@@ -34,7 +34,7 @@
                             </div>
                         </div>
 
-                        {{-- Product Name --}}
+                        <!-- Product Name -->
                         <div>
                             <label class="text-lg font-medium">Product Name</label>
                             <div class="my-3">
@@ -48,7 +48,7 @@
                             </div>
                         </div>
 
-                        {{-- Product Description --}}
+                        <!-- Product Description -->
                         <div>
                             <label class="text-lg font-medium">Product Description</label>
                             <div class="my-3">
@@ -62,7 +62,7 @@
                             </div>
                         </div>
 
-                        {{-- Product Price --}}
+                        <!-- Product Price  -->
                         <div>
                             <label class="text-lg font-medium">Product Price</label>
                             <div class="my-3">
@@ -76,12 +76,12 @@
                             </div>
                         </div>
 
-                        {{-- Product Image --}}
+                        <!-- Product Image -->
                         <div>
                             <label class="text-lg font-medium">Product Image</label>
                             <div class="my-3">
                                 @if($product->product_image)
-                                    <img src="{{ asset('storage/' . $product->product_image) }}" alt="Current Image" width="100" class="mb-2">
+                                <img src="{{ asset('storage/' . $product->product_image) }}" alt="Current Image" width="100" class="mb-2">
                                 @endif
                                 <input type="file" name="product_image"
                                     class="border-gray-300 shadow-sm w-1/2 rounded-lg">
@@ -92,8 +92,7 @@
                             </div>
                         </div>
 
-                        <button type="submit"
-                            class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
+                        <button type="submit" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
                             Update Product
                         </button>
                     </form>

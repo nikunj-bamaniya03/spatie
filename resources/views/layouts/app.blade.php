@@ -13,7 +13,19 @@
         <!-- for JS script -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-        
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+        <!-- JQuery validation CDN
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>-->
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -38,3 +50,9 @@
        @stack('scripts')
     </body>
 </html>
+
+<script>
+    $(function () {
+        $('.datatable').DataTable();
+    });
+</script>

@@ -8,14 +8,30 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\UpdateRoleRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\View\View;
+use Termwind\Components\Raw;
 
-
-class RoleController extends Controller
+class RoleController extends Controller implements HasMiddleware
 {
+    public static function middleware()
+    {
+        return [
+            new Middleware('permission:view-role', only: ['index']),
+            new Middleware('permission:add-role', only: ['create']),
+            new Middleware('permission:edit-role', only: ['edit']),
+            new Middleware('permission:delete-role', only: ['destroy'])
+
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $roles = Role::orderBy('name', 'ASC')->get();
         return view('role.list', compact('roles'));
@@ -24,7 +40,7 @@ class RoleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         $permissions = Permission::orderBy('name', 'ASC')->get();
         return view('role.create', compact('permissions'));
@@ -35,7 +51,7 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request)
+    public function store(Request $request): RedirectResponse
     {
         // 1. Role create
         $role = Role::create([
@@ -60,7 +76,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $role = Role::findOrFail($id);
 
@@ -81,7 +97,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, string $id)
+    public function update(UpdateRoleRequest $request, string $id): RedirectResponse
     {
         $role = Role::findOrFail($id);
         $role->update([
@@ -99,7 +115,7 @@ class RoleController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         $role = Role::findOrFail($id);
         $role->delete();

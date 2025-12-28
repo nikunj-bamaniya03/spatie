@@ -1,14 +1,3 @@
-<!-- @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif -->
-
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -21,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     
-                <form action="{{ route('permissions.store') }}" method="POST">
+                <form id="create-pemission" action="{{ route('permissions.store') }}" method="POST">
                     @csrf
                     <div>
                         <label for="name" class="text-lg font-medium">Name</label>
@@ -39,5 +28,13 @@
             </div>
         </div>
     </div>
+    {{-- jQuery --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    {{-- jQuery Validation --}}
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    
+    {{-- Your custom validation --}}
+    <script src="{{ asset('assets/admin/js/validation.js') }}"></script>
 </x-app-layout>
  

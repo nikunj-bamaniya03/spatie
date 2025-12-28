@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
-
+    protected $guard_name = 'web';
     /**
      * The attributes that are mass assignable.
      *
@@ -45,5 +45,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // for default role=user
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->assignRole('user'); // Automatic default role
+        });
     }
 }

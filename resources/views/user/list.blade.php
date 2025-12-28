@@ -1,0 +1,92 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('User List') }}
+            </h2>
+            {{-- <a href="{{ route('users.bcreate') }}"
+               class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
+                Add User
+            </a>--}}
+        </div>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <x-alert />
+                <x-error />
+
+                <div class="p-6 text-gray-900">
+                    <table class="datatable w-full">
+                        <thead class="bg-gray-100">
+                            <tr class="border-b">
+                                <th class="px-6 py-3 text-left">#</th>
+                                <th class="px-6 py-3 text-left">Name</th>
+                                <th class="px-6 py-3 text-left">Email</th>
+                                <th class="px-6 py-3 text-left">Roles</th>
+                                <th class="px-6 py-3 text-left">Permissions</th>
+                                <th class="px-6 py-3 text-center">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach($users as $user)
+                            <tr id="row-{{ $user->id }}" class="border-b">
+                                <td class="px-6 py-2">{{ $user->id }}</td>
+                                <td class="px-6 py-2">{{ $user->name }}</td>
+                                <td class="px-6 py-2">{{ $user->email }}</td>
+
+                                <td class="px-6 py-2">
+                                    @foreach($user->roles as $role)
+                                        <span class="bg-blue-100 px-2 py-1 rounded text-xs">
+                                            {{ $role->name }}
+                                        </span>
+                                    @endforeach
+                                </td>
+
+                                <td class="px-6 py-2">
+                                    @foreach($user->getAllPermissions() as $permission)
+                                        <span class="bg-green-100 px-2 py-1 rounded text-xs mr-2">
+                                            {{ $permission->name }}
+                                        </span>
+                                    @endforeach
+                                </td>
+
+                                <td class="px-6 py-2 text-center">
+                                    <div class="flex justify-center gap-2">
+                                        @can('edit-user')
+                                        <a href="{{ route('users.edit',$user->id) }}"
+                                           class="bg-slate-600 text-sm rounded-md text-white px-3 py-1">
+                                            Edit
+                                        </a>
+                                        @endcan
+
+                                        @can('delete-user')
+                                        <a href="#"
+                                           data-id="{{ $user->id }}"
+                                           class="delete-record bg-red-600 text-sm rounded-md text-white px-3 py-1">
+                                            Delete
+                                        </a>
+                                        @endcan
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- DYNAMIC DELETE URL -->
+    @push('scripts')
+        <script>
+            const deleteUrl = "{{ route('users.destroy', ':id') }}";
+        </script>
+
+        <script src="{{ asset('assets/admin/js/userDelete.js') }}"></script>
+    @endpush
+</x-app-layout>

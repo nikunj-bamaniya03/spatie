@@ -18,25 +18,43 @@
                 </div>
 
                 <!-- Permission Links -->
+                @can('view-permission')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('permissions.index')" :active="request()->routeIs('permissions.index')">
                         {{ __('Permission') }}
                     </x-nav-link>
                 </div>
+                @endcan
+
 
                 <!-- Role Links -->
+                @can('view-role')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
                         {{ __('Role') }}
                     </x-nav-link>
                 </div>
+                @endcan
 
                 <!-- Product Links -->
+                @can('view-product')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
                         {{ __('Product') }}
                     </x-nav-link>
                 </div>
+                @endcan
+
+
+                <!-- USer Links -->
+                @can('view-user')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                        {{ __('User') }}
+                    </x-nav-link>
+                </div>
+                @endcan
+
             </div>
 
             <!-- Settings Dropdown -->

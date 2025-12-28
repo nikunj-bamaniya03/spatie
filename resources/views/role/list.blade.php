@@ -15,7 +15,7 @@
                 <x-error />
                 <div class="p-6 text-gray-900">
                     
-                    <table class="w-full">
+                    <table class="datatable w-full">
                         <thead class="bg-gray-100">
                             <tr class="border-b">
                                 <th class="px-6 py-3 text-left" width="60">#</th>
@@ -39,12 +39,17 @@
                                 </td>
                                 <td class="px-6 py-3 text-center">
                                     <div class="flex justify-center gap-2">
+                                        @can('edit-role')
                                         <a href="{{ route('roles.edit', $role->id) }}"
                                             class="bg-slate-600 text-white px-3 py-1 rounded">
                                             Edit </a>
+                                        @endcan
+
+                                        @can('delete-role')
                                         <a href="#" data-id="{{ $role->id }}" 
                                             class="delete-role bg-red-600 text-sm rounded-md text-white px-3 py-1 hover:bg-red-500">
                                         Delete </a>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
