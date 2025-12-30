@@ -7,23 +7,23 @@
         <div class="max-w-7xl mx-auto">
             <div class="bg-white p-6 rounded shadow">
 
-                <form action="{{ route('users.update', $user->id) }}" method="POST">
+                <form action="{{ route('users.update', encrypt($user->id)) }}" method="POST">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
 
                         <!-- Name -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Name</label>
-                            <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                                class="mt-2 w-full border-gray-300 shadow-sm rounded-lg focus:ring focus:ring-indigo-200"
+                            <input type="text" name="name" value="{{ old('name', $user->name) }}"readonly
+                                class="mt-2 w-full border-gray-300 shadow-sm rounded-lg bg-gray-100 cursor-not-allowed focus:ring focus:ring-indigo-200"
                                 placeholder="Enter full name">
                         </div>
 
                         <!-- Email -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                                class="mt-2 w-full border-gray-300 shadow-sm rounded-lg focus:ring focus:ring-indigo-200"
+                            <input type="email" name="email" value="{{ old('email', $user->email) }}"readonly
+                                class="mt-2 w-full border-gray-300 shadow-sm rounded-lg bg-gray-100 cursor-not-allowed focus:ring focus:ring-indigo-200 readonly"
                                 placeholder="Enter email address">
                         </div>
                     </div>

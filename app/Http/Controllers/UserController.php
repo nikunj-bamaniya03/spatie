@@ -13,6 +13,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\View\View;
 
 class UserController extends Controller implements HasMiddleware
@@ -30,7 +31,13 @@ class UserController extends Controller implements HasMiddleware
      */
     public function index(): View
     {
-        $users = User::latest()->get();
+        // Get the ID of the currently authenticated user
+        $currentUserId = Auth::id();
+
+        // Remove the current user form list of user
+        $users = User::latest()
+            ->where('id', '!=', $currentUserId)->get();
+
         return view('user.list', compact('users'));
     }
 
@@ -73,7 +80,8 @@ class UserController extends Controller implements HasMiddleware
      */
     public function edit(string $id): View
     {
-        $user = User::findOrFail($id);
+        $decryptedId = decrypt($id); 
+        $user = User::findOrFail($decryptedId);
 
         $roles = Role::orderBy('name')->get();
         $permissions = Permission::orderBy('name')->get();
@@ -95,7 +103,8 @@ class UserController extends Controller implements HasMiddleware
      */
     public function update(Request $request, string $id): RedirectResponse
     {
-        $user = User::findOrFail($id);
+        $decryptedId = decrypt($id);
+        $user = User::findOrFail($decryptedId);
 
         // Update basic info
         $user->update([
@@ -119,6 +128,7 @@ class UserController extends Controller implements HasMiddleware
      */
     public function destroy(string $id): JsonResponse
     {
+        // $decryptedId = Crypt::decryptString($id);
         $user = User::findOrFail($id);
         $user->delete();
 

@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+                    <form id="edit-product" action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Category Dropdown -->
@@ -77,30 +77,44 @@
                         </div>
 
                         <!-- Product Image -->
-                        <div>
-                            <label class="text-lg font-medium">Product Image</label>
-                            <div class="my-3">
-                                <div class="flex">
-                                    @if($product->product_image)
-                                    <div class="mb-2">
-                                        <p class="text-sm text-gray-600">Current Image:</p>
-                                        <img src="{{ asset('storage/' . $product->product_image) }}" alt="Current Image" width="100" class="mb-2 border rounded">
-                                    </div>
-                                    @endif
-                                    <div id="preview_container" class="mb-2" style="display: none;">
-                                        <p class="text-sm text-gray-600">Preview:</p>
-                                        <img id="preview_image" alt="Preview Image" width="100" class="mb-2 border rounded">
-                                    </div>
+                        <!-- <div>
+                            <div>
+                                <label class="text-lg font-medium">Product Image</label>
+                            </div>
 
-                                    @error('product_image')
-                                    <p class="text-red-400 font-medium">{{ $message }}</p>
-                                    @enderror
+                            <div class="my-3 relative inline-block"> -->
+
+                                <!-- Image Box -->
+                                <!-- <div id="image_box" class="relative w-32 h-32 border rounded overflow-hidden cursor-pointer"> -->
+
+                                    <!-- Current / Preview Image -->
+                                    <!-- <img id="main_image" src="{{ $product->product_image ? asset('storage/'.$product->product_image) : '' }}"
+                                        class="w-full h-full object-cover" alt="Product Image"> -->
+
+                                    <!-- Cross Button -->
+                                    <!-- <button type="button"  id="remove_image" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-sm flex items-center justify-center hidden">
+                                        ✕
+                                    </button>
                                 </div>
 
-                                <input type="file" name="product_image" id="product_image"
-                                    class="border-gray-300 shadow-sm w-1/2 rounded-lg" accept="image/*">
-                            </div>
-                        </div>
+                            </div> -->
+
+                            <!-- File Input -->
+                            <!-- <input type="file" name="product_image" id="product_image" class="border-gray-300 shadow-sm rounded-lg mt-2" accept="image/*">
+
+                        </div> -->
+
+                        <!--  Zoom Modal -->
+                        <!-- <div id="image_modal"
+                            class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+
+                            <img id="zoom_image" class="max-w-[90%] max-h-[90%] rounded shadow-lg">
+
+                            <button id="close_modal" class="absolute top-5 right-5 text-white text-3xl">
+                                ✕ 
+                            </button>
+                        </div> -->
+                        <x-image-upload :image="$product->product_image" />
 
                         <button type="submit" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
                             Update Product
@@ -113,7 +127,16 @@
     </div>
 
     @push('scripts')
-    <script src="{{ asset('assets/admin/js/editProductPreview.js') }}"></script>
+    {{-- jQuery --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    {{-- jQuery Validation --}}
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+    {{-- jQuery validation --}}
+    <script src="{{ asset('assets/admin/js/validation.js') }}"></script>
+    {{-- edit image preview link --}}
+    <script src="{{ asset('assets/admin/js/image-upload.js') }}"></script>
     @endpush
 
 </x-app-layout>

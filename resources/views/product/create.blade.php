@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="create-product" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Category Dropdown -->
@@ -69,7 +69,7 @@
                         </div>
 
                         <!-- Product Image  -->
-                        <div>
+                        <!-- <div>
                             <label class="text-lg font-medium">Product Image</label>
                             <div class="my-3">
                                 <input type="file" name="product_image" class="border-gray-300 shadow-sm w-1/2 rounded-lg">
@@ -77,7 +77,9 @@
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
-                        </div>
+                        </div> -->
+                        <x-image-upload />
+
 
                         <button type="submit"
                             class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
@@ -89,4 +91,17 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    {{-- jQuery --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    {{-- jQuery Validation --}}
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
+    {{-- jQuery validation --}}
+    <script src="{{ asset('assets/admin/js/validation.js') }}"></script>
+    {{-- image upload preview --}}
+    <script src="{{ asset('assets/admin/js/image-upload.js') }}"></script>
+    @endpush
 </x-app-layout>

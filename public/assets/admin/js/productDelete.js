@@ -6,24 +6,48 @@ $.ajaxSetup({
 
 $(document).on('click', '.delete-product', function (e) {
     e.preventDefault();
+    //stop the reloading and default behaviour of browser
 
-    let productId = $(this).data('id');
-    let url = productDestroyUrl.replace(':id', productId);
+    let roleId = $(this).data('id');
+    let url = destroyProductUrl.replace(':id', roleId);
 
-    if (!confirm('Are you sure you want to delete this product?')) return;
-
-    $.ajax({
-        url: url,
-        type: 'DELETE',
-        success: function (response) {
-            if (response.status) {
-                alert(response.message);
-                location.reload();
-            }
-        },
-        error: function (xhr) {
-            console.error(xhr.responseText);
-            alert('Delete failed!');
+    // SweetAlert for confirmation
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // If confirmed, proceed with the AJAX request
+            $.ajax({
+                url: url, // Use your actual URL variable here
+                type: 'DELETE',
+                success: function (response) {
+                    if (response.status) {
+                        // SweetAlert for success message
+                        Swal.fire(
+                            'Deleted!',
+                            response.message,
+                            'success'
+                        ).then(() => {
+                            location.reload(); // Reload the page after the alert is dismissed
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    // SweetAlert for error message
+                    Swal.fire(
+                        'Error!',
+                        'Something went wrong!',
+                        'error'
+                    );
+                }
+            });
         }
     });
 });

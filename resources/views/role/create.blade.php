@@ -39,13 +39,14 @@
             </div>
         </div>
     </div>
+    @push('scripts')
     {{-- jQuery --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     {{-- jQuery Validation --}}
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
-    {{-- Your custom validation --}}
+    {{-- jQuery validation --}}
     <script src="{{ asset('assets/admin/js/validation.js') }}"></script>
-
+    @endpush
 </x-app-layout>

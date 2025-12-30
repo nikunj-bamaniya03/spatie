@@ -1,7 +1,3 @@
-/*
-* script for delete role
-*/
-
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -9,25 +5,49 @@ $.ajaxSetup({
 });
 
 $(document).on('click', '.delete-role', function (e) {
-    e.preventDefault(); //stop the reloading and default behaviour of browser
+    e.preventDefault();
+    //stop the reloading and default behaviour of browser
 
     let roleId = $(this).data('id');
-    let url = roleDestroyUrl.replace(':id', roleId);
+    let url = destroyRoleUrl.replace(':id', roleId);
 
-    if (!confirm('Are you sure you want to delete this role?')) return;
-
-    $.ajax({
-        url: url,
-        type: 'DELETE',
-        success: function (response) {
-            if (response.status) {
-                alert(response.message);
-                location.reload();
-            }
-        },
-        error: function (xhr) {
-            console.log(xhr.responseText);
-            alert('Something went wrong!');
+    // SweetAlert for confirmation
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // If confirmed, proceed with the AJAX request
+            $.ajax({
+                url: url, // Use your actual URL variable here
+                type: 'DELETE',
+                success: function (response) {
+                    if (response.status) {
+                        // SweetAlert for success message
+                        Swal.fire(
+                            'Deleted!',
+                            response.message,
+                            'success'
+                        ).then(() => {
+                            location.reload(); // Reload the page after the alert is dismissed
+                        });
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    // SweetAlert for error message
+                    Swal.fire(
+                        'Error!',
+                        'Something went wrong!',
+                        'error'
+                    );
+                }
+            });
         }
     });
 });

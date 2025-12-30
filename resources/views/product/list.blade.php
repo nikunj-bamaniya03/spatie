@@ -79,11 +79,10 @@
 
             </div>
 
-
             <!-- Pagination -->
             <div class="mt-8">
                 {{ $products->links() }}
-            </div>
+            </div> 
         </div>
     </div>
 
@@ -93,8 +92,13 @@
     <!-- AJAX -->
     @push('scripts')
     <script>
-        var productDestroyUrl = "{{ route('products.destroy', ':id') }}";
+        const destroyProductUrl = "{{ route('products.destroy', ':id') }}";
     </script>
+
+    <!-- SweetAlert CDN (CORRECT) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Public JS file -->
     <script src="{{ asset('assets/admin/js/productDelete.js') }}"></script>
     @endpush
 
