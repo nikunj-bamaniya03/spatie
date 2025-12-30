@@ -18,13 +18,13 @@
                 </div>
 
                 <!-- Permission Links -->
-                @can('view-permission')
+                {{-- @can('view-permission')
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('permissions.index')" :active="request()->routeIs('permissions.index')">
                         {{ __('Permission') }}
                     </x-nav-link>
                 </div>
-                @endcan
+                @endcan --}}
 
 
                 <!-- Role Links -->

@@ -22,8 +22,8 @@
                         <thead class="bg-gray-100">
                             <tr class="border-b">
                                 <th class="px-6 py-3 text-left">#</th>
-                                <th class="px-6 py-3 text-left">Name</th>
-                                <th class="px-6 py-3 text-left">Email</th>
+                                <th class="px-6 py-3 text-left" width="80">Name</th>
+                                <th class="px-6 py-3 text-left" width="80">Email</th>
                                 <th class="px-6 py-3 text-left">Roles</th>
                                 <th class="px-6 py-3 text-left">Permissions</th>
                                 <th class="px-6 py-3 text-center">Action</th>
@@ -57,16 +57,15 @@
                                     <div class="flex justify-center gap-2">
                                         @can('edit-user')
                                         <a href="{{ route('users.edit',$user->id) }}"
-                                           class="bg-slate-600 text-sm rounded-md text-white px-3 py-1">
-                                            Edit
+                                            class="text-blue-600 hover:text-blue-800 transition">
+                                            <i class="fas fa-edit text-lg"></i>
                                         </a>
                                         @endcan
 
                                         @can('delete-user')
-                                        <a href="#"
-                                           data-id="{{ $user->id }}"
-                                           class="delete-record bg-red-600 text-sm rounded-md text-white px-3 py-1">
-                                            Delete
+                                        <a href="#" data-id="{{ $user->id }}"
+                                           class="delete-product text-red-600 hover:text-red-800 transition">
+                                            <i class="fas fa-trash text-lg"></i>
                                         </a>
                                         @endcan
                                     </div>
@@ -80,6 +79,8 @@
             </div>
         </div>
     </div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- DYNAMIC DELETE URL -->
     @push('scripts')

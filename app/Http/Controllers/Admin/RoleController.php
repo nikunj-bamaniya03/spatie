@@ -53,12 +53,12 @@ class RoleController extends Controller implements HasMiddleware
      */
     public function store(Request $request): RedirectResponse
     {
-        // 1. Role create
+        // Role create
         $role = Role::create([
             'name' => $request->name,
         ]);
 
-        // 2. Assign permissions (if selected)
+        // Assign permissions (if selected)
         if ($request->filled('permission')) {
             $role->syncPermissions($request->permission);
         }

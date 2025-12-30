@@ -1,4 +1,4 @@
-<x-app-layout>
+<!-- <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -57,15 +57,15 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Define dynamic route variable -->
-    @push('scripts')
+    <!-- @push('scripts')
     <script>
         var permissionDestroyUrl = "{{ route('permissions.destroy', ':id') }}";
-    </script>
+    </script> -->
 
     <!-- public JS file -->
-    <script src="{{ asset('assets/admin/js/permission.js') }}"></script>
+    <!-- <script src="{{ asset('assets/admin/js/permission.js') }}"></script>
     @endpush
-</x-app-layout>
+</x-app-layout> -->

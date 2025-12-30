@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -11,6 +13,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class UserController extends Controller implements HasMiddleware
 {
@@ -18,7 +21,6 @@ class UserController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('permission:view-user', only: ['index']),
-            // new Middleware('permission:add-user', only: ['create', 'store']),
             new Middleware('permission:edit-user', only: ['edit', 'update']),
             new Middleware('permission:delete-user', only: ['destroy']),
         ];
@@ -26,7 +28,7 @@ class UserController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $users = User::latest()->get();
         return view('user.list', compact('users'));
@@ -43,7 +45,7 @@ class UserController extends Controller implements HasMiddleware
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RegisterUserRequest $request)
+    public function store(RegisterUserRequest $request): RedirectResponse
     {
         $user = User::create([
             'name' => $request->name,
@@ -69,7 +71,7 @@ class UserController extends Controller implements HasMiddleware
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $user = User::findOrFail($id);
 
@@ -91,7 +93,7 @@ class UserController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): RedirectResponse
     {
         $user = User::findOrFail($id);
 
@@ -115,7 +117,7 @@ class UserController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         $user = User::findOrFail($id);
         $user->delete();

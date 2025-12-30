@@ -9,7 +9,7 @@ $.ajaxSetup({
 });
 
 $(document).on('click', '.delete-role', function (e) {
-    e.preventDefault();
+    e.preventDefault(); //stop the reloading and default behaviour of browser
 
     let roleId = $(this).data('id');
     let url = roleDestroyUrl.replace(':id', roleId);

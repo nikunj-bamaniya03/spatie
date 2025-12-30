@@ -48,10 +48,10 @@ class User extends Authenticatable
     }
 
     // for default role=user
-    protected static function booted()
+    protected static function booted(): Void
     {
         static::created(function ($user) {
-            $user->assignRole('user'); // Automatic default role
+            $user->assignRole('user');
         });
     }
 }

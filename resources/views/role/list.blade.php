@@ -19,10 +19,10 @@
                         <thead class="bg-gray-100">
                             <tr class="border-b">
                                 <th class="px-6 py-3 text-left" width="60">#</th>
-                                <th class="px-6 py-3 text-left">Name</th>
+                                <th class="px-6 py-3 text-left" width="100">Name</th>
                                 <th class="px-6 py-3 text-left">Permission</th>
-                                <th class="px-6 py-3 text-left" width="180">Created</th>
-                                <th class="px-6 py-3 text-center" width="180">Action</th>
+                                <th class="px-6 py-3 text-left" width="100">Created</th>
+                                <th class="px-6 py-3 text-center" width="80">Action</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white-100">
@@ -37,18 +37,20 @@
                                 <td class="px-6 py-3">
                                     {{ $role->created_at->format('d M, Y') }}
                                 </td>
-                                <td class="px-6 py-3 text-center">
+                                <td class="mt-4 flex text-center gap-8">
                                     <div class="flex justify-center gap-2">
                                         @can('edit-role')
                                         <a href="{{ route('roles.edit', $role->id) }}"
-                                            class="bg-slate-600 text-white px-3 py-1 rounded">
-                                            Edit </a>
+                                            class="text-blue-600 hover:text-blue-800 transition">
+                                            <i class="fas fa-edit text-lg"></i>
+                                        </a>
                                         @endcan
 
                                         @can('delete-role')
                                         <a href="#" data-id="{{ $role->id }}" 
-                                            class="delete-role bg-red-600 text-sm rounded-md text-white px-3 py-1 hover:bg-red-500">
-                                        Delete </a>
+                                            class="delete-product text-red-600 hover:text-red-800 transition">
+                                            <i class="fas fa-trash text-lg"></i>
+                                        </a>
                                         @endcan
                                     </div>
                                 </td>
@@ -62,6 +64,8 @@
             </div>
         </div>
     </div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Define dynamic route variable -->
     @push('scripts')

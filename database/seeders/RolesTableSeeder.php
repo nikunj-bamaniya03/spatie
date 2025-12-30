@@ -10,13 +10,13 @@ class RolesTableSeeder extends Seeder
 {
     public function run(): void
     {
-        // Step 1: Default roles create karo
+        // Default roles create
         $roles = ['admin', 'user'];
         foreach ($roles as $roleName) {
             Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
         }
 
-        // Step 2: Existing users ko default 'user' role assign karo
+        // Existing users default 'user' role assign
         $userRole = Role::where('name', 'user')->first();
 
         foreach (User::whereDoesntHave('roles')->get() as $user) {

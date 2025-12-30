@@ -20,7 +20,7 @@
                 @foreach($products as $product)
                 <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
 
-                     <!-- Image  -->
+                    <!-- Image  -->
                     <div class="h-48 bg-gray-100 overflow-hidden">
                         @if($product->product_image)
                         <img src="{{ asset('storage/'.$product->product_image) }}"
@@ -32,7 +32,7 @@
                         @endif
                     </div>
 
-                    
+
                     <!-- Body -->
                     <div class="p-4">
 
@@ -57,19 +57,19 @@
                         </div>
 
                         <!-- Actions -->
-                        <div class="mt-4 flex gap-2">
+                        <div class="mt-4 flex justify-center gap-4">
                             @can('edit-product')
                             <a href="{{ route('products.edit',$product->id) }}"
-                                class="flex-1 text-center bg-blue-600 text-white py-2 rounded text-sm">
-                                Edit
+                                class="text-blue-600 hover:text-blue-800 transition">
+                                <i class="fas fa-edit text-lg"></i>
                             </a>
                             @endcan
 
                             @can('delete-product')
-                            <button data-id="{{ $product->id }}"
-                                class="delete-product flex-1 bg-red-600 text-white py-2 rounded text-sm">
-                                Delete
-                            </button>
+                            <a data-id="{{ $product->id }}"
+                                class="delete-product text-red-600 hover:text-red-800 transition">
+                                <i class="fas fa-trash text-lg"></i>
+                            </a>
                             @endcan
                         </div>
 
@@ -78,8 +78,17 @@
                 @endforeach
 
             </div>
+
+
+            <!-- Pagination -->
+            <div class="mt-8">
+                {{ $products->links() }}
+            </div>
         </div>
     </div>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- AJAX -->
     @push('scripts')

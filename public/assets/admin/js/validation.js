@@ -18,7 +18,7 @@ $(document).ready(function () {
         }
     });
 
-    // create permission validation
+    // edit permission validation
     $('#edit-permission').validate({
         rules: {
             name: {
@@ -56,7 +56,7 @@ $(document).ready(function () {
         }
     });
 
-    // create role validation
+    // edit role validation
     $('#edit-role').validate({
         rules: {
             name: {

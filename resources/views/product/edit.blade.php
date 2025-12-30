@@ -80,15 +80,25 @@
                         <div>
                             <label class="text-lg font-medium">Product Image</label>
                             <div class="my-3">
-                                @if($product->product_image)
-                                <img src="{{ asset('storage/' . $product->product_image) }}" alt="Current Image" width="100" class="mb-2">
-                                @endif
-                                <input type="file" name="product_image"
-                                    class="border-gray-300 shadow-sm w-1/2 rounded-lg">
+                                <div class="flex">
+                                    @if($product->product_image)
+                                    <div class="mb-2">
+                                        <p class="text-sm text-gray-600">Current Image:</p>
+                                        <img src="{{ asset('storage/' . $product->product_image) }}" alt="Current Image" width="100" class="mb-2 border rounded">
+                                    </div>
+                                    @endif
+                                    <div id="preview_container" class="mb-2" style="display: none;">
+                                        <p class="text-sm text-gray-600">Preview:</p>
+                                        <img id="preview_image" alt="Preview Image" width="100" class="mb-2 border rounded">
+                                    </div>
 
-                                @error('product_image')
-                                <p class="text-red-400 font-medium">{{ $message }}</p>
-                                @enderror
+                                    @error('product_image')
+                                    <p class="text-red-400 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <input type="file" name="product_image" id="product_image"
+                                    class="border-gray-300 shadow-sm w-1/2 rounded-lg" accept="image/*">
                             </div>
                         </div>
 
@@ -101,4 +111,9 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+    <script src="{{ asset('assets/admin/js/editProductPreview.js') }}"></script>
+    @endpush
+
 </x-app-layout>
