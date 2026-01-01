@@ -44,7 +44,7 @@
                     </div>
 
                     <!-- Permissions -->
-                    <div class="mb-4">
+                    <!-- <div class="mb-4">
                         <label class="font-medium">Permissions</label>
                         <div class="grid grid-cols-4 gap-2">
                             @foreach($permissions as $permission)
@@ -55,7 +55,7 @@
                             </label>
                             @endforeach
                         </div>
-                    </div>
+                    </div> -->
 
                     <button class="bg-slate-700 text-white px-5 py-2 rounded">
                         Update User

@@ -16,21 +16,25 @@
                         <!-- Category Dropdown -->
                         <div>
                             <label class="text-lg font-medium">Category</label>
+
                             <div class="my-3">
-                                <select name="category_id" class="border-gray-300 shadow-sm w-1/2 rounded-lg">
-                                    <option value="">-- Select Category --</option>
+                                <select id="category-select" name="category_id[]" multiple placeholder="Select Category"
+                                    class="border-gray-300 shadow-sm w-1/2 rounded-lg">
+
                                     @foreach($categories as $category)
                                     <option value="{{ $category->id }}"
-                                        {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ collect(old('category_id'))->contains($category->id) ? 'selected' : '' }}>
                                         {{ $category->categorie_name }}
                                     </option>
                                     @endforeach
                                 </select>
+
                                 @error('category_id')
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
+
 
                         <!-- Product Name -->
                         <div>
@@ -103,5 +107,20 @@
     <script src="{{ asset('assets/admin/js/validation.js') }}"></script>
     {{-- image upload preview --}}
     <script src="{{ asset('assets/admin/js/image-upload.js') }}"></script>
+
+    {{-- Multiple-select --}}
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script src="{{ asset('assets/admin/js/multi-select.js') }}"></script>
+
     @endpush
 </x-app-layout>
+<script>
+    new TomSelect("#category-select", {
+        plugins: [
+            'checkbox_options',
+            'remove_button'
+        ],
+        maxItems: null,
+        create: false,
+    });
+</script>

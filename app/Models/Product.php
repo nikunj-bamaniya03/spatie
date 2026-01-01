@@ -15,9 +15,8 @@ class Product extends Model
         'product_image',
     ];
 
-    // one to one
-    public function category(): BelongsTo
+    public function categories()
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsToMany(Category::class);
     }
 }

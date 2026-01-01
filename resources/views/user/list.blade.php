@@ -4,10 +4,12 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('User List') }}
             </h2>
-            {{-- <a href="{{ route('users.bcreate') }}"
+            @can ('add-user')
+            <a href="{{ route('users.create') }}"
                class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
                 Add User
-            </a>--}}
+            </a>
+            @endcan
         </div>
     </x-slot>
 
@@ -21,12 +23,12 @@
                     <table class="datatable w-full" id="data-table">
                         <thead class="bg-gray-100">
                             <tr class="border-b">
-                                <th class="px-6 py-3 text-left">#</th>
-                                <th class="px-6 py-3 text-left" width="80">Name</th>
-                                <th class="px-6 py-3 text-left" width="80">Email</th>
-                                <th class="px-6 py-3 text-left">Roles</th>
-                                <th class="px-6 py-3 text-left">Permissions</th>
-                                <th class="px-6 py-3 text-center">Action</th>
+                                <th class="px-6 py-3 text-left" style="width:30px">#</th>
+                                <th class="px-6 py-3 text-left" style="width:130px">Name</th>
+                                <th class="px-6 py-3 text-left" style="width:260px">Email</th>
+                                <th class="px-6 py-3 text-left" style="width:80px">Roles</th>
+                                <!-- <th class="px-6 py-3 text-left">Permissions</th> -->
+                                <th class="px-6 py-3" style="width:20px;">Action</th>
                             </tr>
                         </thead>
 
@@ -45,13 +47,13 @@
                                     @endforeach
                                 </td>
 
-                                <td class="px-6 py-2">
+                                <!-- <td class="px-6 py-2">
                                     @foreach($user->getAllPermissions() as $permission)
                                         <span class="bg-green-100 px-2 py-1 rounded text-xs mr-2">
                                             {{ $permission->name }}
                                         </span>
                                     @endforeach
-                                </td>
+                                </td> -->
 
                                 <td class="px-6 py-2 text-center">
                                     <div class="flex justify-center gap-2">

@@ -15,6 +15,7 @@
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
 
 
         <!-- Scripts -->
@@ -39,6 +40,7 @@
             </main>
         </div>
        @stack('scripts')
+
     </body>
 </html>
 

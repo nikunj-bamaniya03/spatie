@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddUserRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -46,25 +47,27 @@ class UserController extends Controller implements HasMiddleware
      */
     public function create()
     {
-        //
+        $roles = Role::orderBy('name')->get();
+        return view('user.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
+     * when user can registered
      */
-    public function store(RegisterUserRequest $request): RedirectResponse
+    public function store(AddUserRequest $request): RedirectResponse
     {
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => Hash::make('12344321'),
         ]);
 
-        // default role for new user
-        // $user->assignRole('user'); 
-        Auth::login($user);
+        // assign EXACT selected role
+        $role = Role::findById($request->role_id);
+        $user->assignRole($role->name);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('users.index')->with('success', 'User added successfully');
     }
 
     /**
@@ -80,7 +83,7 @@ class UserController extends Controller implements HasMiddleware
      */
     public function edit(string $id): View
     {
-        $decryptedId = decrypt($id); 
+        $decryptedId = decrypt($id);
         $user = User::findOrFail($decryptedId);
 
         $roles = Role::orderBy('name')->get();

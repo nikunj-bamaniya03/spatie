@@ -77,11 +77,29 @@ class ProductController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    // public function index(): View
+    // {
+    //     $products = Product::with('categories')->orderBy('created_at', 'DESC')->paginate(4);
+    //     return view('product.list', compact('products'));
+    // }
+
+    public function index(Request $request)
     {
-        $products = Product::with('category')->orderBy('created_at', 'DESC')->paginate(4);
-        return view('product.list', compact('products'));
+        $categories = Category::orderBy('categorie_name')->get();
+
+        $products = Product::with('categories')
+            ->when($request->category_id, function ($query) use ($request) {
+                $query->whereHas('categories', function ($q) use ($request) {
+                    $q->where('categories.id', $request->category_id);
+                });
+            })
+            ->latest()
+            ->paginate(4)
+            ->withQueryString();
+
+        return view('product.list', compact('products', 'categories'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -98,17 +116,19 @@ class ProductController extends Controller implements HasMiddleware
 
     public function store(AddProductRequest $request): RedirectResponse
     {
-        // Image upload
+        // Image upload (your existing method)
         $imagePath = $this->handleImageUpload($request);
 
-        // Insert product
-        Product::create([
-            'category_id'         => $request->category_id,
+        // Create product
+        $product = Product::create([
             'product_name'        => $request->product_name,
             'product_description' => $request->product_description,
             'product_price'       => $request->product_price,
             'product_image'       => $imagePath,
         ]);
+
+        // Attach multiple categories (pivot table)
+        $product->categories()->sync($request->category_id);
 
         return redirect()
             ->route('products.index')

@@ -14,6 +14,37 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <form method="GET" action="{{ route('products.index') }}">
+                    <div class="flex gap-3 items-center">
+
+                        <select name="category_id"
+                            class="border rounded px-4 py-2 w-64">
+                            <option value="">-- All Categories --</option>
+
+                            @foreach($categories as $category)
+                            <option value="{{ $category->id }}"
+                                {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->categorie_name }}
+                            </option>
+                            @endforeach
+                        </select>
+
+                        <button type="submit"
+                            class="bg-indigo-600 text-white px-5 py-2 rounded">
+                            Filter
+                        </button>
+
+                        @if(request( 'category_id'))
+                        <a href="{{ route('products.index') }}"
+                            class="bg-gray-200 px-5 py-2 rounded">
+                            Reset
+                        </a>
+                        @endif
+
+                    </div>
+                </form>
+            </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
@@ -37,10 +68,17 @@
                     <div class="p-4">
 
                         <!-- Category -->
-                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">
-                            {{ $product->category->categorie_name ?? 'No Category' }}
+                        @if($product->categories->count())
+                        @foreach($product->categories as $category)
+                        <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded mr-1">
+                            {{ $category->categorie_name }}
                         </span>
-
+                        @endforeach
+                        @else
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                            No Category
+                        </span>
+                        @endif
                         <!-- Name -->
                         <h3 class="font-semibold text-lg mt-2">
                             {{ $product->product_name }}
@@ -85,7 +123,6 @@
             </div>
         </div>
     </div>
-
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 

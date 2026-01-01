@@ -4,7 +4,13 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Role List') }}
             </h2>
-            <a href="{{ route('roles.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">Add Role</a>
+            <!-- <a href="{{ route('roles.create') }}" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">Add Role</a> -->
+            @can('add-role')
+            <a href="{{ route('roles.create') }}"
+                class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
+                Add Role
+            </a>
+            @endcan
         </div>
     </x-slot>
 
@@ -18,11 +24,11 @@
                     <table id="data-table" class="datatable w-full">
                         <thead class="bg-gray-100">
                             <tr class="border-b">
-                                <th class="px-6 py-3 text-left" width="60">#</th>
-                                <th class="px-6 py-3 text-left" width="100">Name</th>
-                                <th class="px-6 py-3 text-left">Permission</th>
-                                <th class="px-6 py-3 text-left" width="100">Created</th>
-                                <th class="px-6 py-3 text-center" width="80">Action</th>
+                                <th class="px-6 py-3 text-left" style="width:60">#</th>
+                                <th class="px-6 py-3 text-left" style="width:100">Role Name</th>
+                                <!-- <th class="px-6 py-3 text-left">Permission</th> -->
+                                <!-- <th class="px-6 py-3 text-left" width="100">Created</th> -->
+                                <th class="px-6 py-3" style="width:80px;">Action</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white-100">
@@ -31,12 +37,12 @@
                             <tr class="border-b">
                                 <td class="px-6 py-3">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-3">{{ $role->name }}</td>
-                                <td class="px-6 py-3">
+                                <!-- <td class="px-6 py-3">
                                     {{ $role->permissions->pluck('name')->implode(', ') ?: '—' }}
-                                </td>
-                                <td class="px-6 py-3">
+                                </td> -->
+                                <!-- <td class="px-6 py-3">
                                     {{ $role->created_at->format('d M, Y') }}
-                                </td>
+                                </td> -->
                                 <td class="mt-4 flex text-center gap-8">
                                     <div class="flex justify-center gap-2">
                                         @can('edit-role')
@@ -44,7 +50,7 @@
                                             class="text-blue-600 hover:text-blue-800 transition">
                                             <i class="fas fa-edit text-lg"></i>
                                         </a>
-                                        @endcan 
+                                        @endcan
 
                                         @can('delete-role')
                                         <a href="#" data-id="{{ encrypt($role->id) }}"
@@ -77,7 +83,7 @@
 
     <!-- Public JS file -->
     <script src="{{ asset('assets/admin/js/role.js') }}"></script>
-    
+
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <!-- DataTables CSS -->
