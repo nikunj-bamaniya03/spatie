@@ -59,11 +59,11 @@
                                         <a href="{{ route('users.edit', encrypt($user->id)) }}"
                                             class="text-blue-600 hover:text-blue-800 transition">
                                             <i class="fas fa-edit text-lg"></i>
-                                        </a>
+                                        </a> 
                                         @endcan
 
                                         @can('delete-user')
-                                        <a href="#" data-id="{{ $user->id }}"
+                                        <a href="#" data-id="{{ encrypt($user->id) }}"
                                            class="delete-user text-red-600 hover:text-red-800 transition">
                                             <i class="fas fa-trash text-lg"></i>
                                         </a>

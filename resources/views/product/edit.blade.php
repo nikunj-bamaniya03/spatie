@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <form id="edit-product" action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+                    <form id="edit-product" action="{{ route('products.update', encrypt($product->id)) }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Category Dropdown -->
@@ -77,43 +77,6 @@
                         </div>
 
                         <!-- Product Image -->
-                        <!-- <div>
-                            <div>
-                                <label class="text-lg font-medium">Product Image</label>
-                            </div>
-
-                            <div class="my-3 relative inline-block"> -->
-
-                                <!-- Image Box -->
-                                <!-- <div id="image_box" class="relative w-32 h-32 border rounded overflow-hidden cursor-pointer"> -->
-
-                                    <!-- Current / Preview Image -->
-                                    <!-- <img id="main_image" src="{{ $product->product_image ? asset('storage/'.$product->product_image) : '' }}"
-                                        class="w-full h-full object-cover" alt="Product Image"> -->
-
-                                    <!-- Cross Button -->
-                                    <!-- <button type="button"  id="remove_image" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-sm flex items-center justify-center hidden">
-                                        ✕
-                                    </button>
-                                </div>
-
-                            </div> -->
-
-                            <!-- File Input -->
-                            <!-- <input type="file" name="product_image" id="product_image" class="border-gray-300 shadow-sm rounded-lg mt-2" accept="image/*">
-
-                        </div> -->
-
-                        <!--  Zoom Modal -->
-                        <!-- <div id="image_modal"
-                            class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
-
-                            <img id="zoom_image" class="max-w-[90%] max-h-[90%] rounded shadow-lg">
-
-                            <button id="close_modal" class="absolute top-5 right-5 text-white text-3xl">
-                                ✕ 
-                            </button>
-                        </div> -->
                         <x-image-upload :image="$product->product_image" />
 
                         <button type="submit" class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">

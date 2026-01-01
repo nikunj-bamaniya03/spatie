@@ -8,7 +8,7 @@
     {{-- Label --}}
     <div>
         <label class="text-lg font-medium">Product Image</label>
-    </div>
+    </div> 
 
     {{-- Image Box --}}
     <div class="my-3 relative inline-block">
@@ -30,7 +30,7 @@
     <input type="hidden" name="remove_image" class="remove-flag" value="0">
 
     {{-- File Input --}}
-    <input type="file" name="{{ $inputName }}" class="image-input border-gray-300 shadow-sm rounded-lg mt-2" accept="image/*">
+    <input type="file" name="{{ $inputName }}" class="image-input border-gray-300 shadow-sm rounded-lg mt-2" accept="image/png, image/jpg, image/">
 
     {{-- Zoom Modal --}}
     <div

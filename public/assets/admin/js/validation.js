@@ -111,7 +111,7 @@ $(document).ready(function () {
                 min: 0
             },
             product_image: {
-                required: true,
+                // required: true,
                 extension: "jpg|jpeg|png"
             }
         },
@@ -133,7 +133,7 @@ $(document).ready(function () {
                 min: "Price must be greater than or equal to 0"
             },
             product_image: {
-                required: "Please select a product image",
+                // required: "Please select a product image",
                 extension: "Only JPG, PNG, JPEG images are allowed"
             }
         },

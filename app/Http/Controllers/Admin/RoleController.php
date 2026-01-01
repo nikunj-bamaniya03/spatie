@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\View\View;
 use Termwind\Components\Raw;
 
@@ -78,7 +79,8 @@ class RoleController extends Controller implements HasMiddleware
      */
     public function edit(string $id): View
     {
-        $role = Role::findOrFail($id);
+        $decryptedId = decrypt($id);
+        $role = Role::findOrFail($decryptedId);
 
         // existing permissions of this role
         $hasPermissions = $role->permissions->pluck('name')->toArray();
@@ -99,7 +101,8 @@ class RoleController extends Controller implements HasMiddleware
      */
     public function update(UpdateRoleRequest $request, string $id): RedirectResponse
     {
-        $role = Role::findOrFail($id);
+        $decryptedId = decrypt($id);
+        $role = Role::findOrFail($decryptedId);
         $role->update([
             'name' => $request->name,
         ]);
@@ -117,7 +120,8 @@ class RoleController extends Controller implements HasMiddleware
 
     public function destroy(string $id): JsonResponse
     {
-        $role = Role::findOrFail($id);
+        $decryptedId = decrypt($id);
+        $role = Role::findOrFail($decryptedId);
         $role->delete();
 
         return response()->json([

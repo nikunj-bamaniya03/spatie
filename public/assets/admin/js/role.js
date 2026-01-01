@@ -8,9 +8,13 @@ $(document).on('click', '.delete-role', function (e) {
     e.preventDefault();
     //stop the reloading and default behaviour of browser
 
+    let button = $(this);
+    let table  = $('#data-table').DataTable();
+    let row    = button.closest('tr');
+
     let roleId = $(this).data('id');
     let url = destroyRoleUrl.replace(':id', roleId);
-
+ 
     // SweetAlert for confirmation
     Swal.fire({
         title: 'Are you sure?',
@@ -34,7 +38,11 @@ $(document).on('click', '.delete-role', function (e) {
                             response.message,
                             'success'
                         ).then(() => {
-                            location.reload(); // Reload the page after the alert is dismissed
+                            // REMOVE ONLY THE DELETED ROW
+                            table
+                                .row(row)
+                                .remove()
+                                .draw(false); // keep pagination
                         });
                     }
                 },

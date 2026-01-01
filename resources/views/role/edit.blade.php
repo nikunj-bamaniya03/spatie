@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <form id="edit-role" action="{{ route('roles.update', $role->id) }}" method="POST">
+                    <form id="edit-role" action="{{ route('roles.update', encrypt($role->id)) }}" method="POST">
                         @csrf
                         <div class="mb-4">
                             <label for="name" class="text-lg font-medium">Role Name</label>

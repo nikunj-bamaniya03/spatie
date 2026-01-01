@@ -128,8 +128,8 @@ class UserController extends Controller implements HasMiddleware
      */
     public function destroy(string $id): JsonResponse
     {
-        // $decryptedId = Crypt::decryptString($id);
-        $user = User::findOrFail($id);
+        $decryptedId = decrypt($id);
+        $user = User::findOrFail($decryptedId);
         $user->delete();
 
         return response()->json([

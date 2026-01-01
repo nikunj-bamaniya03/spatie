@@ -59,15 +59,15 @@
                         <!-- Actions -->
                         <div class="mt-4 flex justify-center gap-4">
                             @can('edit-product')
-                            <a href="{{ route('products.edit',$product->id) }}"
+                            <a href="{{ route('products.edit',encrypt($product->id)) }}"
                                 class="text-blue-600 hover:text-blue-800 transition">
                                 <i class="fas fa-edit text-lg"></i>
                             </a>
                             @endcan
 
                             @can('delete-product')
-                            <a data-id="{{ $product->id }}"
-                                class="delete-product text-red-600 hover:text-red-800 transition">
+                            <a data-id="{{ encrypt($product->id) }}"
+                                class="delete-product text-red-600 hover:text-red-800 transition cursor-pointer">
                                 <i class="fas fa-trash text-lg"></i>
                             </a>
                             @endcan
@@ -82,7 +82,7 @@
             <!-- Pagination -->
             <div class="mt-8">
                 {{ $products->links() }}
-            </div> 
+            </div>
         </div>
     </div>
 

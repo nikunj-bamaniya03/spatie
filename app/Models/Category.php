@@ -9,6 +9,7 @@ class Category extends Model
 {
     protected $fillable = ['name'];
 
+    // one to many
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);

@@ -27,11 +27,27 @@ class ProductController extends Controller implements HasMiddleware
             new Middleware('permission:delete-product', only: ['destroy']),
         ];
     }
-    
+
     private function handleImageUpload(Request $request, ?string $oldImagePath = null): ?string
     {
+        /* 
+         * REMOVE IMAGE (X BUTTON CLICK)
+        */
+        if ($request->remove_image == 1) {
+
+            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
+            }
+
+            return null;
+        }
+
+        /* 
+         * NEW IMAGE UPLOAD
+        */
         if ($request->hasFile('product_image')) {
-            // Delete old image if exists
+
+            // delete old image
             if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
                 Storage::disk('public')->delete($oldImagePath);
             }
@@ -39,21 +55,23 @@ class ProductController extends Controller implements HasMiddleware
             $image = $request->file('product_image');
             $fileName = time() . '_' . Str::random(8) . '.' . $image->getClientOriginalExtension();
             $image->storeAs('products', $fileName, 'public');
+
             return 'products/' . $fileName;
         }
-
+        // if not edit image than stay old image path in db
         return $oldImagePath;
     }
-    
+
+
     public function categories(): Collection
     {
-        return Category::select('id','categorie_name')->get();
+        return Category::select('id', 'categorie_name')->get();
     }
 
     public function productsByCategory($id): Collection
     {
         return Product::where('category_id', $id)
-            ->select('id','product_name','product_price','product_image')
+            ->select('id', 'product_name', 'product_price', 'product_image')
             ->get();
     }
     /**
@@ -61,7 +79,7 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function index(): View
     {
-        $products = Product::with('category')->orderBy('created_at', 'DESC')->paginate(4); 
+        $products = Product::with('category')->orderBy('created_at', 'DESC')->paginate(4);
         return view('product.list', compact('products'));
     }
 
@@ -113,7 +131,8 @@ class ProductController extends Controller implements HasMiddleware
      */
     public function edit(string $id): View
     {
-        $product = Product::findOrFail($id);
+        $decryptedId = decrypt($id);
+        $product = Product::findOrFail($decryptedId);
         $categories = Category::all();
         return view('product.edit', compact('product', 'categories'));
     }
@@ -124,7 +143,8 @@ class ProductController extends Controller implements HasMiddleware
     public function update(UpdateProductRequest $request, string $id): RedirectResponse
     {
         // Get product
-        $product = Product::findOrFail($id);
+        $decryptedId = decrypt($id);
+        $product = Product::findOrFail($decryptedId);
 
         // Handle image upload
         $imagePath = $this->handleImageUpload($request, $product->product_image);
@@ -147,14 +167,15 @@ class ProductController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      */
-   public function destroy(string $id):JsonResponse
+    public function destroy(string $id): JsonResponse
     {
-        $product = Product::findOrFail($id);
+        $decryptedId = decrypt($id);
+        $product = Product::findOrFail($decryptedId);
         $product->delete();
 
         return response()->json([
             'status' => true,
             'message' => 'Product deleted successfully'
         ]);
-    }   
+    }
 }
