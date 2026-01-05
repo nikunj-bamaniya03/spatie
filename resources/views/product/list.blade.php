@@ -13,18 +13,21 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:x`px-6 lg:px-8">
             <div class="mb-6">
                 <form method="GET" action="{{ route('products.index') }}">
                     <div class="flex gap-3 items-center">
 
-                        <select name="category_id"
-                            class="border rounded px-4 py-2 w-64">
+                        <select name="category_id" class="border rounded px-4 py-2 w-64">
                             <option value="">-- All Categories --</option>
 
                             @foreach($categories as $category)
-                            <option value="{{ $category->id }}"
-                                {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                            @php
+                            $encryptedId = encrypt($category->id);
+                            @endphp
+
+                            <option value="{{ $encryptedId }}"
+                                {{ request('category_id') == $encryptedId ? 'selected' : '' }}>
                                 {{ $category->categorie_name }}
                             </option>
                             @endforeach
@@ -35,7 +38,7 @@
                             Filter
                         </button>
 
-                        @if(request( 'category_id'))
+                        @if(request('category_id'))
                         <a href="{{ route('products.index') }}"
                             class="bg-gray-200 px-5 py-2 rounded">
                             Reset
@@ -44,12 +47,14 @@
 
                     </div>
                 </form>
-            </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            </div>
+            <x-alert />
+            <x-error />
+            <div  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
                 @foreach($products as $product)
-                <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+                <div id="product-card-{{ $product->id }}" class="product-card bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
 
                     <!-- Image  -->
                     <div class="h-48 bg-gray-100 overflow-hidden">
@@ -104,7 +109,7 @@
                             @endcan
 
                             @can('delete-product')
-                            <a data-id="{{ encrypt($product->id) }}"
+                            <a data-id="{{ encrypt($product->id) }}" data-product-id="{{ $product->id }}"
                                 class="delete-product text-red-600 hover:text-red-800 transition cursor-pointer">
                                 <i class="fas fa-trash text-lg"></i>
                             </a>

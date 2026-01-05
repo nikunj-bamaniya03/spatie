@@ -29,6 +29,22 @@
                                 <p class="text-red-400 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>
+                            <!-- Password -->
+                            <label for="password" class="text-lg font-medium">password</label>
+                            <div class="my-3">
+                                <input type="password" id="password"  name="password" value="{{ old('password') }}" placeholder="Enter Password" class="border-gray-300 shadow-sm w-1/2 rounded-lg">
+                                @error('password')
+                                <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <!-- Confirmed Password -->
+                            <label for="password_confirmation" class="text-lg font-medium"> confirmed password</label>
+                            <div class="my-3">
+                                <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" placeholder="Enter confirmed password" class="border-gray-300 shadow-sm w-1/2 rounded-lg">
+                                @error('password_confirmation')
+                                <p class="text-red-400 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
                             <!-- Role -->
                             <div>
                                 <label class="text-lg font-medium">Role</label>

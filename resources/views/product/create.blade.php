@@ -114,7 +114,7 @@
 
     @endpush
 </x-app-layout>
-<script>
+<!-- <script>
     new TomSelect("#category-select", {
         plugins: [
             'checkbox_options',
@@ -123,4 +123,4 @@
         maxItems: null,
         create: false,
     });
-</script>
+</script> -->

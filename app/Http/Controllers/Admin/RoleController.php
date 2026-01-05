@@ -4,40 +4,29 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoleRequest;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request;    
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\View\View;
 use Termwind\Components\Raw;
 
-class RoleController extends Controller implements HasMiddleware
+class RoleController extends Controller
 {
-    public static function middleware()
-    {
-        return [
-            new Middleware('permission:view-role', only: ['index']),
-            new Middleware('permission:add-role', only: ['create','store']),
-            new Middleware('permission:edit-role', only: ['edit']),
-            new Middleware('permission:delete-role', only: ['destroy'])
-
-        ];
-    }
+    // public function __construct()
+    // {
+    //     $this->authorizeResource(Role::class, 'role');
+    // }
 
     /** 
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        // $roles = Role::orderBy('name', 'ASC')->get();
-        // return view('role.list', compact('roles'));
-
         $currentUserId = Auth::id();
 
         // Remove the current user form list of user
@@ -86,7 +75,7 @@ class RoleController extends Controller implements HasMiddleware
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): View
+    public function edit(string $id)
     {
         $decryptedId = decrypt($id);
         $role = Role::findOrFail($decryptedId);

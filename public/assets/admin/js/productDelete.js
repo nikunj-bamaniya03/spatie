@@ -9,6 +9,7 @@ $(document).on('click', '.delete-product', function (e) {
     //stop the reloading and default behaviour of browser
 
     let roleId = $(this).data('id');
+    let productId   = $(this).data('product-id');
     let url = destroyProductUrl.replace(':id', roleId);
 
     // SweetAlert for confirmation
@@ -25,7 +26,7 @@ $(document).on('click', '.delete-product', function (e) {
             // If confirmed, proceed with the AJAX request
             $.ajax({
                 url: url, // Use your actual URL variable here
-                type: 'DELETE',
+                type: 'DELETE', 
                 success: function (response) {
                     if (response.status) {
                         // SweetAlert for success message
@@ -34,7 +35,10 @@ $(document).on('click', '.delete-product', function (e) {
                             response.message,
                             'success'
                         ).then(() => {
-                            location.reload(); // Reload the page after the alert is dismissed
+                            $('#product-card-' + productId)
+                            .fadeOut(300, function () {
+                                $(this).remove();
+                            });
                         });
                     }
                 },

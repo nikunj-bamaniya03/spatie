@@ -45,12 +45,12 @@
                                 </td> -->
                                 <td class="mt-4 flex text-center gap-8">
                                     <div class="flex justify-center gap-2">
-                                        @can('edit-role')
+                                        <!-- @can('edit-role')
                                         <a href="{{ route('roles.edit', encrypt($role->id)) }}"
                                             class="text-blue-600 hover:text-blue-800 transition">
                                             <i class="fas fa-edit text-lg"></i>
                                         </a>
-                                        @endcan
+                                        @endcan -->
 
                                         @can('delete-role')
                                         <a href="#" data-id="{{ encrypt($role->id) }}"

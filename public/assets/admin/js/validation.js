@@ -143,4 +143,58 @@ $(document).ready(function () {
             form.submit();
         }
     });
+
+
+    // add-user validation
+
+    $('#create-user').validate({
+        rules: {
+            name: {
+                required: true,
+            },
+            email: {
+                required: true,
+                email: true,
+            },
+            password: {
+                required: true,
+                minlength: 8,
+            },
+            password_confirmation: {
+                required: true,
+                equalTo: '#password'
+            },
+            role_id: {
+                required: true,
+                number: true,
+            },
+        },
+
+        messages: {
+            name: {
+                required: "Please enter your name",
+            },
+            email: {
+                required: "Please enter your email",
+                email: "Please enter a valid email address",
+            },
+            password: {
+                required: "Please enter a password",
+                minlength: "Password must be at least 8 characters",
+            },
+            password_confirmation: {
+                required: "Please confirm your password",
+                equalTo: "Passwords do not matchssssss"
+            },
+            role_id: {
+                required: "Please select a role",
+                number: "Role must be a valid number",
+            },
+        },
+        errorClass: "text-red-500 text-sm mt-1",
+        errorElement: "p",
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
 });

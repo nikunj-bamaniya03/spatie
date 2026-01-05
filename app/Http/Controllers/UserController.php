@@ -10,23 +10,18 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\View\View;
 
-class UserController extends Controller implements HasMiddleware
+class UserController extends Controller
 {
-    public static function middleware()
-    {
-        return [
-            new Middleware('permission:view-user', only: ['index']),
-            new Middleware('permission:edit-user', only: ['edit', 'update']),
-            new Middleware('permission:delete-user', only: ['destroy']),
-        ];
-    }
+    // public function __construct()
+    // {
+    //     $this->authorizeResource(User::class, 'user');
+    // }
+
     /**
      * Display a listing of the resource.
      */
@@ -55,13 +50,9 @@ class UserController extends Controller implements HasMiddleware
      * Store a newly created resource in storage.
      * when user can registered
      */
-    public function store(AddUserRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make('12344321'),
-        ]);
+        $user = User::create($request->only('name','email') + ['password' => Hash::make($request->password)]);
 
         // assign EXACT selected role
         $role = Role::findById($request->role_id);
@@ -110,10 +101,7 @@ class UserController extends Controller implements HasMiddleware
         $user = User::findOrFail($decryptedId);
 
         // Update basic info
-        $user->update([
-            'name'  => $request->name,
-            'email' => $request->email,
-        ]);
+        $user->update($request->only('name','email') + ['password' => Hash::make($request->password)]);
 
         // Sync roles
         $user->syncRoles($request->roles ?? []);
@@ -121,9 +109,7 @@ class UserController extends Controller implements HasMiddleware
         // Sync permissions
         $user->syncPermissions($request->permissions ?? []);
 
-        return redirect()
-            ->route('users.index')
-            ->with('success', 'User updated successfully');
+        return redirect() ->route('users.index')->with('success', 'User updated successfully');
     }
 
     /**

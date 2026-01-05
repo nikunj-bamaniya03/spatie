@@ -12,21 +12,16 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+
 use Illuminate\View\View;
 
-class ProductController extends Controller implements HasMiddleware
+
+class ProductController extends Controller
 {
-    public static function middleware()
-    {
-        return [
-            new Middleware('permission:view-product', only: ['index']),
-            new Middleware('permission:add-product', only: ['create', 'store']),
-            new Middleware('permission:edit-product', only: ['edit', 'update']),
-            new Middleware('permission:delete-product', only: ['destroy']),
-        ];
-    }
+    // public function __construct()
+    // {
+    //     $this->authorizeResource(Product::class, 'product');
+    // }
 
     private function handleImageUpload(Request $request, ?string $oldImagePath = null): ?string
     {
@@ -71,34 +66,35 @@ class ProductController extends Controller implements HasMiddleware
     public function productsByCategory($id): Collection
     {
         return Product::where('category_id', $id)
-            ->select('id', 'product_name', 'product_price', 'product_image')
-            ->get();
+            ->select('id', 'product_name', 'product_price', 'product_image')->get();
     }
     /**
      * Display a listing of the resource.
      */
-    // public function index(): View
-    // {
-    //     $products = Product::with('categories')->orderBy('created_at', 'DESC')->paginate(4);
-    //     return view('product.list', compact('products'));
-    // }
-
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $categories = Category::orderBy('categorie_name')->get();
 
+        $categoryId = null;
+
+        if ($request->filled('category_id')) {
+            try {
+                $categoryId = decrypt($request->category_id);
+            } catch (\Exception $e) {
+                // $categoryId = null;
+            }
+        }
+
         $products = Product::with('categories')
-            ->when($request->category_id, function ($query) use ($request) {
-                $query->whereHas('categories', function ($q) use ($request) {
-                    $q->where('categories.id', $request->category_id);
+            ->when($categoryId, function ($query) use ($categoryId) { //check if categoryId exist either skip
+                $query->whereHas('categories', function ($q) use ($categoryId) { //check matched id
+                    $q->where('categories.id', $categoryId); // check both id
                 });
             })
-            ->latest()
-            ->paginate(4)
-            ->withQueryString();
-
+            ->latest()->paginate(4)->withQueryString();
         return view('product.list', compact('products', 'categories'));
     }
+
 
 
     /**
@@ -119,24 +115,13 @@ class ProductController extends Controller implements HasMiddleware
         // Image upload (your existing method)
         $imagePath = $this->handleImageUpload($request);
 
-        // Create product
-        $product = Product::create([
-            'product_name'        => $request->product_name,
-            'product_description' => $request->product_description,
-            'product_price'       => $request->product_price,
-            'product_image'       => $imagePath,
-        ]);
+        $product = Product::create($request->only('product_name', 'product_description', 'product_price') + ['product_image' => $imagePath]);
 
         // Attach multiple categories (pivot table)
         $product->categories()->sync($request->category_id);
 
-        return redirect()
-            ->route('products.index')
-            ->with('success', 'Product added successfully!');
+        return redirect()->route('products.index')->with('success', 'Product added successfully!');
     }
-
-
-
 
     /**
      * Display the specified resource.
@@ -152,10 +137,11 @@ class ProductController extends Controller implements HasMiddleware
     public function edit(string $id): View
     {
         $decryptedId = decrypt($id);
-        $product = Product::findOrFail($decryptedId);
-        $categories = Category::all();
+        $product = Product::with('categories')->findOrFail($decryptedId);
+        $categories = Category::select('id', 'categorie_name')->get();
         return view('product.edit', compact('product', 'categories'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -165,23 +151,17 @@ class ProductController extends Controller implements HasMiddleware
         // Get product
         $decryptedId = decrypt($id);
         $product = Product::findOrFail($decryptedId);
-
         // Handle image upload
         $imagePath = $this->handleImageUpload($request, $product->product_image);
 
         // Update product
-        $product->update([
-            'category_id'         => $request->category_id,
-            'product_name'        => $request->product_name,
-            'product_description' => $request->product_description,
-            'product_price'       => $request->product_price,
-            'product_image'       => $imagePath,
-        ]);
+        $product->update($request->only('product_name', 'product_description', 'product_price') + ['product_image' => $imagePath]);
+
+        // Sync categories (pivot table)
+        $product->categories()->sync($request->category_id ?? []);
 
         // Redirect correctly
-        return redirect()
-            ->route('products.index')
-            ->with('success', 'Product updated successfully!');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
 
     /**
@@ -192,10 +172,10 @@ class ProductController extends Controller implements HasMiddleware
         $decryptedId = decrypt($id);
         $product = Product::findOrFail($decryptedId);
         $product->delete();
-
+        
         return response()->json([
             'status' => true,
-            'message' => 'Product deleted successfully'
+            'message' => 'Product deleted successfully',
         ]);
     }
 }

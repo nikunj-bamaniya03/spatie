@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Policies\ProductPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[UsePolicy(ProductPolicy::class)]
 class Product extends Model
 {
     protected $fillable = [
