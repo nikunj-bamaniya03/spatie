@@ -6,7 +6,7 @@
             </h2>
             @can ('add-user')
             <a href="{{ route('users.create') }}"
-               class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
+                class="bg-slate-700 text-sm rounded-md text-white px-5 py-3">
                 Add User
             </a>
             @endcan
@@ -15,66 +15,49 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="row mb-3">
+                <!-- Name Search -->
+                <div class="col-md-4">
+                    <input type="text" id="name_filter" class="form-control"
+                        placeholder="Search Name">
+                </div>
+
+                <!-- Created At Date Range -->
+                <div class="col-md-4 d-flex gap-2">
+                    <input type="date" id="from_date" class="form-control">
+                    <input type="date" id="to_date" class="form-control">
+                </div>
+
+                <!-- Role Multi Select -->
+                <div class="col-md-4">
+                    <select id="role_filter" class="form-select" multiple placeholder="Select Role">
+                        @foreach($roles as $role)
+                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <x-alert />
                 <x-error />
 
                 <div class="p-6 text-gray-900">
-                    <table class="datatable w-full" id="data-table">
+                    <table class="table table-striped" style="width:100%" id="data-table">
                         <thead class="bg-gray-100">
                             <tr class="border-b">
                                 <th class="px-6 py-3 text-left" style="width:30px">#</th>
                                 <th class="px-6 py-3 text-left" style="width:130px">Name</th>
                                 <th class="px-6 py-3 text-left" style="width:260px">Email</th>
                                 <th class="px-6 py-3 text-left" style="width:80px">Roles</th>
+                                <th class="px-6 py-3 text-left" style="width:80px">Created At</th>
                                 <!-- <th class="px-6 py-3 text-left">Permissions</th> -->
                                 <th class="px-6 py-3" style="width:20px;">Action</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                            @foreach($users as $user)
-                            <tr id="row-{{ $user->id }}" class="border-b">
-                                <td class="px-6 py-2">{{ $loop->iteration }}</td>
-                                <td class="px-6 py-2">{{ $user->name }}</td>
-                                <td class="px-6 py-2">{{ $user->email }}</td>
-
-                                <td class="px-6 py-2">
-                                    @foreach($user->roles as $role)
-                                        <span class="bg-blue-100 px-2 py-1 rounded text-xs">
-                                            {{ $role->name }}
-                                        </span>
-                                    @endforeach
-                                </td>
-
-                                <!-- <td class="px-6 py-2">
-                                    @foreach($user->getAllPermissions() as $permission)
-                                        <span class="bg-green-100 px-2 py-1 rounded text-xs mr-2">
-                                            {{ $permission->name }}
-                                        </span>
-                                    @endforeach
-                                </td> -->
-
-                                <td class="px-6 py-2 text-center">
-                                    <div class="flex justify-center gap-2">
-                                        @can('edit-user')
-                                        <a href="{{ route('users.edit', encrypt($user->id)) }}"
-                                            class="text-blue-600 hover:text-blue-800 transition">
-                                            <i class="fas fa-edit text-lg"></i>
-                                        </a> 
-                                        @endcan
-
-                                        @can('delete-user')
-                                        <a href="#" data-id="{{ encrypt($user->id) }}"
-                                           class="delete-user text-red-600 hover:text-red-800 transition">
-                                            <i class="fas fa-trash text-lg"></i>
-                                        </a>
-                                        @endcan
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
                         </tbody>
+
                     </table>
                 </div>
 
@@ -82,8 +65,8 @@
         </div>
     </div>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     @push('scripts')
     <script>
         const destroyUserUrl = "{{ route('users.destroy', ':id') }}";
@@ -95,10 +78,82 @@
     <!-- Public JS file -->
     <script src="{{ asset('assets/admin/js/userDelete.js') }}"></script>
 
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    @endpush
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
+    <!-- DataTables Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+
+
+    <!-- multi-select dropdown -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <script src="{{ asset('assets/admin/js/multi-select.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            let table = $('#data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('users.list') }}",
+                    data: function(d) {
+                        d.name = $('#name_filter').val();
+                        d.from_date = $('#from_date').val();
+                        d.to_date = $('#to_date').val();
+                        d.roles = $('#role_filter').val(); // array
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'email'
+                    },
+                    {
+                        data: 'roles',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'created_at',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                order: [
+                    [1, 'asc']
+                ],
+                pageLength: 3,
+                lengthMenu: [3, 10, 50, 100]
+            });
+
+            // Trigger reload on filters
+            $('#name_filter, #from_date, #to_date').on('keyup change', function() {
+                table.draw();
+            });
+
+            $('#role_filter').on('change', function() {
+                table.draw();
+            });
+
+        });
+    </script>
+
+
+    @endpush
 </x-app-layout>

@@ -22,12 +22,13 @@ class AddProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id'         => 'required|exists:categories,id',
+            'category_id'         => 'sometimes|required|exists:categories,id',
             'product_name'        => 'required|max:255',
             'product_description' => 'nullable|max:500',
             'product_price'       => 'required|numeric|min:0',
             'product_image'       => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'category_ids' => 'required|array',
+            'category_ids.*' => 'exists:categories,id'
         ];
     }
-
 }

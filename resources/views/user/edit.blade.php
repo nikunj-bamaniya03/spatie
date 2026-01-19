@@ -9,6 +9,7 @@
 
                 <form action="{{ route('users.update', encrypt($user->id)) }}" method="POST">
                     @csrf
+                    @method('PUT')
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
 
                         <!-- Name -->

@@ -18,7 +18,7 @@ class RolePolicy
     /**
      * View single role
      */
-    public function view(User $user): bool
+    public function view(User $user, Role $role): bool
     {
         return $user->can('view-role');
     }
@@ -34,7 +34,7 @@ class RolePolicy
     /**
      * Update role
      */
-    public function update(User $user): bool
+    public function update(User $user, Role $role): bool
     {
         return $user->can('edit-role');
     }
@@ -42,7 +42,7 @@ class RolePolicy
     /**
      * Delete role
      */
-    public function delete(User $user): bool
+    public function delete(User $user, Role $role): bool
     {
         return $user->can('delete-role');
     }

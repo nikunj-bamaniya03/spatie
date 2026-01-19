@@ -19,9 +19,10 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <x-alert />
                 <x-error />
+
                 <div class="p-6 text-gray-900">
 
-                    <table id="data-table" class="datatable w-full">
+                    <table class="table table-striped" style="width:100%" id="data-table">
                         <thead class="bg-gray-100">
                             <tr class="border-b">
                                 <th class="px-6 py-3 text-left" style="width:60">#</th>
@@ -31,39 +32,7 @@
                                 <th class="px-6 py-3" style="width:80px;">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white-100">
-                            @if($roles->isNotEmpty())
-                            @foreach ($roles as $role)
-                            <tr class="border-b">
-                                <td class="px-6 py-3">{{ $loop->iteration }}</td>
-                                <td class="px-6 py-3">{{ $role->name }}</td>
-                                <!-- <td class="px-6 py-3">
-                                    {{ $role->permissions->pluck('name')->implode(', ') ?: '—' }}
-                                </td> -->
-                                <!-- <td class="px-6 py-3">
-                                    {{ $role->created_at->format('d M, Y') }}
-                                </td> -->
-                                <td class="mt-4 flex text-center gap-8">
-                                    <div class="flex justify-center gap-2">
-                                        <!-- @can('edit-role')
-                                        <a href="{{ route('roles.edit', encrypt($role->id)) }}"
-                                            class="text-blue-600 hover:text-blue-800 transition">
-                                            <i class="fas fa-edit text-lg"></i>
-                                        </a>
-                                        @endcan -->
-
-                                        @can('delete-role')
-                                        <a href="#" data-id="{{ encrypt($role->id) }}"
-                                            class="delete-role text-red-600 hover:text-red-800 transition">
-                                            <i class="fas fa-trash text-lg"></i>
-                                        </a>
-                                        @endcan
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                            @endif
-
+                        <tbody>
                         </tbody>
                     </table>
                 </div>
@@ -71,8 +40,9 @@
         </div>
     </div>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     @push('scripts')
     <script>
         const destroyRoleUrl = "{{ route('roles.destroy', ':id') }}";
@@ -85,9 +55,47 @@
     <script src="{{ asset('assets/admin/js/role.js') }}"></script>
 
     <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> -->
     <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> -->
+
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- DataTables Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            const table = $('#data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('roles.list') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
+            });
+        });
+    </script>
     @endpush
 
 

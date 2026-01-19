@@ -9,12 +9,12 @@ $(document).on('click', '.delete-role', function (e) {
     //stop the reloading and default behaviour of browser
 
     let button = $(this);
-    let table  = $('#data-table').DataTable();
-    let row    = button.closest('tr');
+    let table = $('#data-table').DataTable();
+    let row = button.closest('tr');
 
     let roleId = $(this).data('id');
     let url = destroyRoleUrl.replace(':id', roleId);
- 
+
     // SweetAlert for confirmation
     Swal.fire({
         title: 'Are you sure?',
@@ -30,6 +30,9 @@ $(document).on('click', '.delete-role', function (e) {
             $.ajax({
                 url: url, // Use your actual URL variable here
                 type: 'DELETE',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
                 success: function (response) {
                     if (response.status) {
                         // SweetAlert for success message

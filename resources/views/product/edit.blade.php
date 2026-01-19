@@ -12,7 +12,7 @@
 
                     <form id="edit-product" action="{{ route('products.update', encrypt($product->id)) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-
+                        @method('PUT')
                         <!-- Category Dropdown -->
                         <div>
                             <label class="text-lg font-medium">Category</label>

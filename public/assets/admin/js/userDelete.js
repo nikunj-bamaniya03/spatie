@@ -8,11 +8,11 @@ $(document).on('click', '.delete-user', function (e) {
     e.preventDefault();
 
     let button = $(this);
-    let table  = $('#data-table').DataTable();
-    let row    = button.closest('tr');
+    let table = $('#data-table').DataTable();
+    let row = button.closest('tr');
 
     let roleId = button.data('id');
-    let url    = destroyUserUrl.replace(':id', roleId);
+    let url = destroyUserUrl.replace(':id', roleId);
 
     Swal.fire({
         title: 'Are you sure?',
@@ -28,7 +28,7 @@ $(document).on('click', '.delete-user', function (e) {
             $.ajax({
                 url: url,
                 type: 'DELETE',
-
+                data: { _token: $('meta[name="csrf-token"]').attr('content') },
                 success: function (response) {
                     if (response.status) {
 

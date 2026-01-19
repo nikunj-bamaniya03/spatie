@@ -19,14 +19,16 @@ class UpdateProductRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-   public function rules(): array
+    public function rules(): array
     {
         return [
-            'category_id'         => 'required|exists:categories,id',
+            'category_id'         => 'sometimes|required|exists:categories,id',
             'product_name'        => 'required|max:255',
             'product_description' => 'nullable|max:500',
             'product_price'       => 'required|numeric|min:0',
             'product_image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'category_ids' => 'sometimes|required|array',
+            'category_ids.*' => 'exists:categories,id',
         ];
     }
 }

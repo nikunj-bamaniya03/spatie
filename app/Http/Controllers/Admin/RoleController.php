@@ -7,6 +7,7 @@ use App\Http\Requests\StoreRoleRequest;
 use Illuminate\Http\Request;    
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+// use App\Models\Role;
 use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -14,13 +15,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\View\View;
 use Termwind\Components\Raw;
+use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->authorizeResource(Role::class, 'role');
-    // }
 
     /** 
      * Display a listing of the resource.
@@ -37,6 +35,27 @@ class RoleController extends Controller
     }
 
     /**
+     *  Display a listing of the resource using yajra datatable.
+     */
+     public function listTable(Request $request)
+    {
+        // Fetch roles (you may exclude super-admin if needed)
+        $roles = Role::latest()->get();
+
+        return DataTables::of($roles)
+            ->addIndexColumn()
+            ->addColumn('action', function ($role) {
+                $delete = '<a href="#" data-id="' . encrypt($role->id) . '" class="delete-role text-red-600 hover:text-red-800 mx-1"><i class="fas fa-trash"></i></a>';
+
+                $buttons = '';
+                if(auth()->user()->can('delete-role')) $buttons .= $delete;
+
+                return $buttons;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+    /**
      * Show the form for creating a new resource.
      */
     public function create(): View
@@ -52,7 +71,6 @@ class RoleController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        // Role create
         $role = Role::create([
             'name' => $request->name,
         ]);
@@ -77,6 +95,7 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
+        
         $decryptedId = decrypt($id);
         $role = Role::findOrFail($decryptedId);
 
@@ -99,6 +118,7 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, string $id): RedirectResponse
     {
+        
         $decryptedId = decrypt($id);
         $role = Role::findOrFail($decryptedId);
         $role->update([
@@ -118,6 +138,7 @@ class RoleController extends Controller
 
     public function destroy(string $id): JsonResponse
     {
+        
         $decryptedId = decrypt($id);
         $role = Role::findOrFail($decryptedId);
         $role->delete();
@@ -127,5 +148,4 @@ class RoleController extends Controller
             'message' => 'Role deleted successfully'
         ]);
     }
-
 }
